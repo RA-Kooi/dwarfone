@@ -554,7 +554,15 @@ namespace dwarfone
                             string mod = "";
                             for (uint i = 0; i < (value - 4); i++)
                             {
-                                mod += Enum.GetName(typeof(Mod), elf_data.ReadByte()) + " ";
+                                int mod_b = elf_data.ReadByte();
+
+                                if(enableQuirks)
+                                {
+                                    if(mod_b == 0)
+                                        mod_b = 1;
+                                }
+
+                                mod += Enum.GetName(typeof(Mod), mod_b) + " ";
                             }
                             mod += "0x" + ELF.ReadUInt32(elf_data, elf.GetEndian()).ToString("x");
                             text = ("        " + Enum.GetName(typeof(At), at & 0xFFF0) + "(<" + value + ">" + mod + ")");
